@@ -20,9 +20,6 @@ Une application full-stack de gestion de requêtes développée avec Angular, La
 # Cloner le projet
 git clone , fin vous connaissez
 cd request-app
-#Vous installer les dependances du back et du front , generez la cle et faites un copy du .env 
-#fin vous connaissez 
-#ou vous m'envoyez fapcent je vous send mon .env 😉
  Nettoyage :
  
 docker-compose down     
