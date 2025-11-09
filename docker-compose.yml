@@ -1,0 +1,126 @@
+# version: '3.8'
+
+# services:
+
+#   mysql:
+#     image: mysql:8.0
+#     container_name: mysql_container
+#     restart: always
+#     environment:
+#       MYSQL_ROOT_PASSWORD: eadl@2025
+#       MYSQL_DATABASE: request_app
+#     ports:
+#       - "3308:3306"
+#     volumes:
+#       - mysql_data:/var/lib/mysql
+#     networks:
+#       - app_network
+#     healthcheck:
+#       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-peadl@2025"]
+#       interval: 5s
+#       timeout: 3s
+#       retries: 20
+#       start_period: 10s
+
+#   backend:
+#     build: ./backend
+#     container_name: request_app_backend
+#     restart: always
+#     working_dir: /var/www
+#     volumes:
+#       - ./backend:/var/www
+#     environment:
+#       DB_CONNECTION: mysql
+#       DB_HOST: mysql_container
+#       DB_PORT: 3306
+#       DB_DATABASE: request_app
+#       DB_USERNAME: root
+#       DB_PASSWORD: eadl@2025
+#     depends_on:
+#       mysql:
+#         condition: service_healthy
+#     ports:
+#       - "9000:9000"
+#     networks:
+#       - app_network
+
+#   frontend:
+#     build: ./frontend
+#     container_name: request_app_frontend
+#     restart: always
+#     ports:
+#       - "4200:80"
+#     depends_on:
+#       - backend
+#     networks:
+#       - app_network
+
+# volumes:
+#   mysql_data:
+
+# networks:
+#   app_network:
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: eadl@2025
+      MYSQL_DATABASE: request_app
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-peadl@2025"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+
+  backend:
+    build: ./backend
+    container_name: request_app_backend
+    restart: always
+    working_dir: /var/www
+    volumes:
+      - ./backend:/var/www
+    environment:
+      APP_ENV: local
+      APP_DEBUG: true
+      DB_CONNECTION: mysql
+      DB_HOST: mysql_container
+      DB_PORT: 3306
+      DB_DATABASE: request_app
+      DB_USERNAME: root
+      DB_PASSWORD: eadl@2025
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "9000:9000"
+    networks:
+      - app_network
+
+  frontend:
+    build: ./frontend
+    container_name: request_app_frontend
+    restart: always
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - app_network
+
+volumes:
+  mysql_data:
+
+networks:
+  app_network:
+    driver: bridge
